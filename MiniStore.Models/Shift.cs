@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace MiniStore.Models
 {
-    internal class Shift
+    public class Shift
     {
         [Key]
-        public int Id { get; set; }
+        //public int Id { get; set; }
         [Column(name:"Shift Id")]
         public string ShiftId {  get; set; } = string.Empty;
         [Column(name:"Shift Name ")]
