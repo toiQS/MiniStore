@@ -11,7 +11,7 @@ namespace MiniStore.Models
     public class Item
     {
         [Key]
-        public int Id { get; set; }
+        //public int Id { get; set; }
         [Column(name: "Item Id")]
         public string ItemId { get; set; } = string.Empty;
         [Column(name: "Item Name")]
