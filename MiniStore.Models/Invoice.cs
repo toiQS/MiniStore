@@ -11,7 +11,7 @@ namespace MiniStore.Models
     public class Invoice
     {
         [Key]
-        public int Id { get; set; }
+        //public int Id { get; set; }
         [Column(name:"Invoice Id")]
         public string InvoiceId { get; set; } = string.Empty;
 
@@ -20,14 +20,16 @@ namespace MiniStore.Models
         public string EmployeeId { get; set; } = string.Empty;
         public Employee Employee { get; set; }
 
-        [ForeignKey(nameof(Customer))]
-        [Column(name: "Customer Id")]
-        public string CustomerId { get; set; } = string.Empty;
-        public Customer Customer { get; set; }
+        //[ForeignKey(nameof(Customer))]
+        //[Column(name: "Customer Id")]
+        //public string CustomerId { get; set; } = string.Empty;
+        //public Customer Customer { get; set; }
+
+        public Customer? Customer { get; set; }
 
         [ForeignKey(nameof(Coupon))]
         [Column(name:"Coupon Id")]
-        public string CouponId { get;set; } = string.Empty;
-        public Coupon Coupon { get; set; }
+        public string? CouponId { get;set; } = string.Empty;
+        public Coupon? Coupon { get; set; }
     }
 }
