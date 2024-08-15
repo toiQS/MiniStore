@@ -12,7 +12,7 @@ namespace MiniStore.Models
     public class InvoiceDetail
     {
         [Key]
-        public int Id { get; set; }
+        //public int Id { get; set; }
         [Column(name:"Invoice Detail Id")]
         public string InvoiceDetailId { get; set; } = string.Empty;
 
