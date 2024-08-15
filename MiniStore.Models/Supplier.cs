@@ -11,7 +11,7 @@ namespace MiniStore.Models
     public class Supplier
     {
         [Key]
-        public int Id { get; set; }
+        //public int Id { get; set; }
         [Column(name: "Supplier Id")]
         public string SupplierId { get; set; } = string.Empty;
         [Column(name:"Supplier Name")]
