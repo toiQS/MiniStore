@@ -11,7 +11,7 @@ namespace MiniStore.Models
     public class Calender
     {
         [Key]
-        public int Id { get; set; }
+        //public int Id { get; set; }
         [Column(name:"Calender Id")]
         public string CalenderId { get; set; } = string.Empty;
         [Column(name: "Day of week")]
