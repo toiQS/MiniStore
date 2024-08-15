@@ -12,7 +12,7 @@ namespace MiniStore.Models
     public class StyleItem
     {
         [Key]
-        public int Id { get; set; }
+        //public int Id { get; set; }
         [Column(name: "Style Item Id")]
         public string StyleItemId { get; set; } = string.Empty;
         [Column(name: "Style Item Name")]
