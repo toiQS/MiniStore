@@ -11,7 +11,7 @@ namespace MiniStore.Models
     public class Employee
     {
         [Key]
-        public int Id { get; set; }
+        //public int Id { get; set; }
         [Column(name: "Employee Id")]
         public string EmployeeId { get; set; } = string.Empty;
         [Column(name:"First Name")]
