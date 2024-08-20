@@ -17,7 +17,7 @@ namespace MiniStore.Models
         [Column(name: "Item Name")]
         public string ItemName {  get; set; } = string.Empty;
         public int Quantity { get; set; }
-        public string Status { get; set; } = string.Empty;
+        public bool Status { get; set; }
         [ForeignKey(nameof(StyleItem))]
         [Column(name: "Style Item Id")]
         public string StyleItemId {  get; set; } = string.Empty;
