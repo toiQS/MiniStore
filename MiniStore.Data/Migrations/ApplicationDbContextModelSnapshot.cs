@@ -32,8 +32,8 @@ namespace MiniStore.Data.Migrations
                         .HasColumnType("int")
                         .HasColumnName("Day of week");
 
-                    b.Property<DateTime>("EndAt")
-                        .HasColumnType("datetime2")
+                    b.Property<TimeOnly>("EndAt")
+                        .HasColumnType("time")
                         .HasColumnName("End At");
 
                     b.Property<string>("ShiftId")
@@ -232,9 +232,8 @@ namespace MiniStore.Data.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
 
                     b.Property<string>("StyleItemId")
                         .IsRequired()
