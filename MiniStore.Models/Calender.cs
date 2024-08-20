@@ -19,6 +19,6 @@ namespace MiniStore.Models
         [Column(name: "Stat At")]
         public TimeOnly StartAt { get; set; }
         [Column(name: "End At")]
-        public DateTime EndAt { get; set; }
+        public TimeOnly EndAt { get; set; }
     }
 }
