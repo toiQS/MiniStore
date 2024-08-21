@@ -1,13 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.Internal;
 using Microsoft.Extensions.Logging;
 using MiniStore.Data;
 using MiniStore.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MiniStore.Services.Files;
 
 namespace MiniStore.Services.coupon
 {
@@ -15,41 +10,30 @@ namespace MiniStore.Services.coupon
     {
         private readonly ApplicationDbContext _db;
         private readonly ILogger<CouponServices> _logger;
-        public CouponServices(ApplicationDbContext db, ILogger<CouponServices> logger)
+        public CouponServices(ApplicationDbContext db)
         {
-            try
-            {
-                _db = db;
-                _logger = logger;
-            }
-            catch (Exception ex)
-            {
-                File.AppendAllTextAsync("/coupon/ConponLogger.txt", "Can't connect to database or can't use tool Logger\n");
-                File.AppendAllTextAsync("/coupon/ConponLogger.txt", $"{ex.StackTrace} \n");
-                File.AppendAllTextAsync("/coupon/ConponLogger.txt", $"{ex.Source} \n");
-            }
-
+            _db = db;
         }
         public async Task<IEnumerable<Coupon>> GetCouponsAsync()
         {
             try
             {
-                var coupons = await _db.Coupons.ToListAsync();
+                var coupons = await _db.Coupons
+                    .AsNoTracking()
+                    .ToListAsync();
                 return coupons;
             }
             catch (Exception ex)
             {
-                var logFilePath = Path.Combine("coupon", "CouponLogger.txt");
-                var errorDetails = new StringBuilder();
-                errorDetails.AppendLine("Can't connect to database");
-                errorDetails.AppendLine($"Message: {ex.Message}");
-                errorDetails.AppendLine($"Stack Trace: {ex.StackTrace}");
-                errorDetails.AppendLine($"Source: {ex.Source}");
-                errorDetails.AppendLine($"Time: {DateTime.Now}");
-
-                await File.AppendAllTextAsync(logFilePath, errorDetails.ToString());
                 return new List<Coupon>();
             }
+        }
+        public string GetPath()
+        {
+            App app = new App();
+            var path = app.GetPathCurrentFolder("coupon","LogCouponFile.txt");
+            
+            return path;
         }
 
         //public async Task<Coupon> GetCouponDetailById(string id)
