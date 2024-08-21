@@ -17,8 +17,10 @@ namespace MiniStore.Models
         public string CouponName {  get; set; } = string.Empty;
         [Column(name: "Coupon Description")]
         public string CouponDescription { get; set;} = string.Empty;
-        [Column(name:"Type Items")]
-        List<string> TypeItems { get; set; } = new List<string>();
+        [Column(name: "Apply To Item")]
+        [ForeignKey(nameof(StyleItem))]
+        public string ApplyToItem {  get; set; } = string.Empty;
+        public virtual StyleItem StyleItem { get; set; }
         public float Value { get; set; }
         public string Unit { get; set; } = string.Empty ;
         [Column(name:("Start At"))]

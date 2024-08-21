@@ -154,6 +154,7 @@ namespace MiniStore.Services.coupon
                 coupon .EndAt = newcoupon.EndAt;
                 coupon.Unit = newcoupon.Unit;
                 coupon.Value = newcoupon.Value;
+                coupon.ApplyToItem = newcoupon.ApplyToItem;
                 _db.Coupons.Update(coupon);
                 await _db.SaveChangesAsync();
                 return true;
