@@ -18,6 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MiniStore.Data\MiniStore.Data.csproj" />
+    <ProjectReference Include="..\MiniStore.Services\MiniStore.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="NUnit.Framework" />
   </ItemGroup>
 
