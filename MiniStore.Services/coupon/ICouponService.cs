@@ -13,6 +13,7 @@ namespace MiniStore.Services.coupon
     public interface ICouponService
     {
         public Task<IEnumerable<Coupon>> GetCouponsAsync();
+        public string GetPath();
         //public Task<IEnumerable<Coupon>> GetCouponDetailById(string id);
         //public Task<IEnumerable<Coupon>> GetCouponsByText(string text);
         //public Task<IEnumerable<Coupon>> GetCouponsByDateRange(DateTime startAt , DateTime endAt);
