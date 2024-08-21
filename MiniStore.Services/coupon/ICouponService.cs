@@ -14,11 +14,11 @@ namespace MiniStore.Services.coupon
     {
         public Task<IEnumerable<Coupon>> GetCouponsAsync();
         public string GetPath();
-        //public Task<IEnumerable<Coupon>> GetCouponDetailById(string id);
-        //public Task<IEnumerable<Coupon>> GetCouponsByText(string text);
-        //public Task<IEnumerable<Coupon>> GetCouponsByDateRange(DateTime startAt , DateTime endAt);
-        //public Task<bool> AddCoupon (Coupon coupon);
-        //public Task<bool> EditCoupon(string couponId, Coupon coupon);
-        //public Task< bool> DeleteCoupon(string couponId);
+        public Task<Coupon> GetCouponDetailById(string id);
+        public Task<IEnumerable<Coupon>> GetCouponsByText(string text);
+        public Task<IEnumerable<Coupon>> GetCouponsByDateRange(DateTime startAt, DateTime endAt);
+        public Task<bool> AddCoupon(Coupon coupon);
+        public Task<bool> EditCoupon(string couponId, Coupon coupon);
+        public Task<bool> DeleteCoupon(string couponId);
     }
 }

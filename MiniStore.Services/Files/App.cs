@@ -32,5 +32,3 @@ namespace MiniStore.Services.Files
 
     }
 }
-//"F:\\Repo\\Local\\MiniStore\\MiniStore.Services\\coupon\\ICouponService.cs"
-//F:\Repo\Local\MiniStore\MiniStore.Test\CouponUnitTest.cs
