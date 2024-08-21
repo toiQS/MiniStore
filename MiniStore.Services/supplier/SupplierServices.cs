@@ -7,7 +7,7 @@ using System.Text;
 
 namespace MiniStore.Services.supplier
 {
-    public class SupplierServices
+    public class SupplierServices : ISupplierServices
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<SupplierServices> _logger;
