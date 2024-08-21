@@ -46,6 +46,7 @@ namespace MiniStore.Services.coupon
             }
         }
         
+        
 
         public async Task<Coupon> GetCouponDetailById(string id)
         {
@@ -72,9 +73,37 @@ namespace MiniStore.Services.coupon
             try
             {
                 var coupon = await _db.Coupons
-                    .Where(
-                    x => x.CouponName.ToLower().Contains(text.ToLower())
+                    .Where(x => 
+                           x.CouponName.ToLower().Contains(text.ToLower())
                         || x.CouponDescription.ToLower().Contains(text.ToLower())
+                        || x.CouponId.ToLower().Contains(text.ToLower())
+                        || x.ApplyToItem.ToLower().Contains(text.ToLower())
+                        
+                        || x.Unit.ToLower().Contains(text.ToLower())
+                    )
+                    .ToListAsync();
+                return coupon;
+            }
+            catch (Exception ex)
+            {
+                var path = GetPath();
+                var errorDetails = new StringBuilder();
+                errorDetails.AppendLine("Can't connect to database\n");
+                errorDetails.AppendLine($"Message: {ex.Message}\n");
+                errorDetails.AppendLine($"Stack Trace: {ex.StackTrace}\n");
+                errorDetails.AppendLine($"Source: {ex.Source} \n");
+                errorDetails.AppendLine($"Time: {DateTime.Now}\n");
+                await File.AppendAllTextAsync(path, errorDetails.ToString());
+                throw;
+            }
+        }
+        public async Task<IEnumerable<Coupon>> GetCouponsByApplyToItemId(string id)
+        {
+            try
+            {
+                var coupon = await _db.Coupons
+                    .Where(
+                    x => x.ApplyToItem == id
                     )
                     .ToListAsync();
                 return coupon;
