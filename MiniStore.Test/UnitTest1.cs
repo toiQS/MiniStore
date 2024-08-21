@@ -12,5 +12,6 @@ namespace MiniStore.Test
         {
             Assert.Pass();
         }
+        
     }
 }
