@@ -6,9 +6,9 @@ namespace MiniStore.Data
 {
     public class User : IdentityUser
     {
-        [ForeignKey(nameof(Employee))]
+        //[ForeignKey(nameof(Employee))]
         [Column(name:"Employee Id")]
         public string EmployeeId { get; set; } = string.Empty;
-        public virtual Employee Employee { get; set; }
+        //public virtual Employee Employee { get; set; }
     }
 }

@@ -20,12 +20,12 @@ namespace MiniStore.Models
         public string EmployeeId { get; set; } = string.Empty;
         public Employee Employee { get; set; }
 
-        //[ForeignKey(nameof(Customer))]
-        //[Column(name: "Customer Id")]
-        //public string CustomerId { get; set; } = string.Empty;
-        //public Customer Customer { get; set; }
+        [ForeignKey(nameof(Customer))]
+        [Column(name: "Customer Id")]
+        public string CustomerId { get; set; } = string.Empty;
+        public Customer Customer { get; set; }
 
-        public Customer? Customer { get; set; }
+        //public Customer? Customer { get; set; }
 
         [ForeignKey(nameof(Coupon))]
         [Column(name:"Coupon Id")]

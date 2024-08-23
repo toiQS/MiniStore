@@ -26,10 +26,10 @@ namespace MiniStore.Models
         [Column(name:"Employee Email")]
         public string EmloyeeEmail { get; set; } = string.Empty;
         public string Phone {  get; set; } = string.Empty;
-        [Column(name:"Calender Id")]
+        [Column(name:"Shift Id")]
         [ForeignKey(nameof(Calender))]
-        public string CalenderId {  get; set; } = string.Empty;
-        public Calender Calender { get; set; }
+        public string ShiftId {  get; set; } = string.Empty;
+        public Shift Shift { get; set; }
         public bool Status {  get; set; }
     }
 }
