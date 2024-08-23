@@ -10,7 +10,7 @@ namespace MiniStore.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        //public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
         public DbSet<Calender> Calender { get; set; }
         public DbSet<Coupon> Coupon { get; set; }
         public DbSet<Customer> Customer { get; set; }
@@ -39,6 +39,7 @@ namespace MiniStore.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
         }
     }
 }
