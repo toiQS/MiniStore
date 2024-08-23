@@ -296,6 +296,83 @@ namespace MiniStore.Data
             //        }); 
 
             //}
+
+            //Seeding data for StyleItems
+
+           modelBuilder.Entity<StyleItem>().ToTable("Style Item").HasData(
+               new StyleItem { StyleItemId = "SI001", StyleItemName = "Fruit", StyleItemDescription = "Fresh Fruits", Status = true },
+               new StyleItem { StyleItemId = "SI002", StyleItemName = "Vegetable", StyleItemDescription = "Organic Vegetables", Status = true }
+           );
+
+           // Seeding data for Customers
+           modelBuilder.Entity<Customer>().ToTable("Customer").HasData(
+                new Customer { CustomerId = "C001", CustomerName = "John Doe", Phone = "0909123456", Status = true },
+                new Customer { CustomerId = "C002", CustomerName = "Jane Smith", Phone = "0909876543", Status = true },
+                new Customer { CustomerId = "C003", CustomerName = "Tom Brown", Phone = "0912345678", Status = false }
+            );
+
+            // Seeding data for Employees
+            modelBuilder.Entity<Employee>().ToTable("Employee").HasData(
+                new Employee { EmployeeId = "E001", FirstName = "Alice", LastName = "Johnson", MiddleName = "M", EmployeeName = "Alice M Johnson", CCCD = 123456789, EmloyeeEmail = "alice@example.com", Phone = "0911222333", CalenderId = "CL001", Status = true },
+                new Employee { EmployeeId = "E002", FirstName = "Bob", LastName = "Williams", MiddleName = "J", EmployeeName = "Bob J Williams", CCCD = 987654321, EmloyeeEmail = "bob@example.com", Phone = "0911333444", CalenderId = "CL002", Status = true }
+            );
+
+            // Seeding data for Items
+            modelBuilder.Entity<Item>().ToTable("Item").HasData(
+                new Item { ItemId = "I001", ItemName = "Apple", Quantity = 100, Status = true, StyleItemId = "SI001" },
+                new Item { ItemId = "I002", ItemName = "Banana", Quantity = 150, Status = true, StyleItemId = "SI002" },
+                new Item { ItemId = "I003", ItemName = "Orange", Quantity = 200, Status = false, StyleItemId = "SI003" }
+            );
+
+            // Seeding data for Coupons
+            modelBuilder.Entity<Coupon>().ToTable("Coupon").HasData(
+                new Coupon { CouponId = "CP001", CouponName = "Discount10", CouponDescription = "10% off on all items", ApplyToItem = "I001", Value = 10.0f, Unit = "%", StartAt = DateTime.Now, EndAt = DateTime.Now.AddMonths(1) },
+                new Coupon { CouponId = "CP002", CouponName = "Discount20", CouponDescription = "20% off on selected items", ApplyToItem = "I002", Value = 20.0f, Unit = "%", StartAt = DateTime.Now, EndAt = DateTime.Now.AddMonths(2) }
+            );
+
+            // Seeding data for Suppliers
+            modelBuilder.Entity<Supplier>().ToTable("Supplier").HasData(
+                new Supplier { SupplierId = "S001", SupplierName = "Fresh Produce Inc.", SupplierPhone = "0909888777", SupplierEmail = "freshproduce@example.com", SupplierAddress = "123 Fruit St.", Status = true },
+                new Supplier { SupplierId = "S002", SupplierName = "Organic Farms", SupplierPhone = "0909777666", SupplierEmail = "organicfarms@example.com", SupplierAddress = "456 Vegetable Ave.", Status = true }
+            );
+
+            // Seeding data for Shifts
+            modelBuilder.Entity<Shift>().ToTable("Shift").HasData(
+                new Shift { ShiftId = "SH001", ShiftName = "Morning Shift" },
+                new Shift { ShiftId = "SH002", ShiftName = "Evening Shift" }
+            );
+
+            // Seeding data for Calendars
+            modelBuilder.Entity<Calender>().ToTable("Calender").HasData(
+                new Calender { CalenderId = "CL001", DayOfWeek = DayOfWeek.Monday, StartAt = new TimeOnly(9, 0), EndAt = new TimeOnly(17, 0) },
+                new Calender { CalenderId = "CL002", DayOfWeek = DayOfWeek.Tuesday, StartAt = new TimeOnly(10, 0), EndAt = new TimeOnly(18, 0) }
+            );
+
+            // Seeding data for Invoices
+            modelBuilder.Entity<Invoice>().ToTable("Invoice").HasData(
+                new Invoice { InvoiceId = "INV001", EmployeeId = "E001", CouponId = "CP001" },
+                new Invoice { InvoiceId = "INV002", EmployeeId = "E002", CouponId = "CP002" }
+            );
+
+            // Seeding data for InvoiceDetails
+            modelBuilder.Entity<InvoiceDetail>().ToTable("Invoice Detail").HasData(
+                new InvoiceDetail { InvoiceDetailId = "ID001", ItemId = "I001", InvoiceId = "INV001", Quantity = 10 },
+                new InvoiceDetail { InvoiceDetailId = "ID002", ItemId = "I002", InvoiceId = "INV002", Quantity = 20 }
+            );
+
+            // Seeding data for Receipts
+            modelBuilder.Entity<Receipt>().ToTable("Receipt").HasData(
+                new Receipt { ReceiptId = "R001", SupplierID = "S001", CreateAt = DateTime.Now },
+                new Receipt { ReceiptId = "R002", SupplierID = "S002", CreateAt = DateTime.Now }
+            );
+
+            // Seeding data for ReceiptDetails
+            modelBuilder.Entity<ReceiptDetail>().ToTable("Receipt Detail").HasData(
+                new ReceiptDetail { ReceiptDetailId = "RD001", ReceiptId = "R001", ItemId = "I001" },
+                new ReceiptDetail { ReceiptDetailId = "RD002", ReceiptId = "R002", ItemId = "I002" }
+            );
+
+            
         }
     }
 }
