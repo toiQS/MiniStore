@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MiniStore.Data;
-using MiniStore.Models;
-using MiniStore.Services.coupon;
+using MiniStore.Services.receipt;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -17,7 +16,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IApplicationBuilder, ApplicationBuilder>();
-builder.Services.AddScoped<ICouponService, CouponServices>();
+
+builder.Services.AddScoped<IReceiptServices, ReceiptServices>();
 
 var app = builder.Build();
 
