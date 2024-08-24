@@ -12,8 +12,8 @@ using MiniStore.Data;
 namespace MiniStore.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240823191318_MiniStore-AddingModel")]
-    partial class MiniStoreAddingModel
+    [Migration("20240824164040_MiniStore-Adding-Models")]
+    partial class MiniStoreAddingModels
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,9 +40,7 @@ namespace MiniStore.Data.Migrations
                         .HasColumnName("End At");
 
                     b.Property<string>("ShiftId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("Shift Id");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<TimeOnly>("StartAt")
                         .HasColumnType("time")
@@ -385,13 +383,9 @@ namespace MiniStore.Data.Migrations
 
             modelBuilder.Entity("MiniStore.Models.Calender", b =>
                 {
-                    b.HasOne("MiniStore.Models.Shift", "Shift")
+                    b.HasOne("MiniStore.Models.Shift", null)
                         .WithMany("Calenders")
-                        .HasForeignKey("ShiftId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Shift");
+                        .HasForeignKey("ShiftId");
                 });
 
             modelBuilder.Entity("MiniStore.Models.Coupon", b =>

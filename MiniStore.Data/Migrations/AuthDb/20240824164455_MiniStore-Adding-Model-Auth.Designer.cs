@@ -12,8 +12,8 @@ using MiniStore.Data;
 namespace MiniStore.Data.Migrations.AuthDb
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20240823191335_MiniStore-Add-Auth")]
-    partial class MiniStoreAddAuth
+    [Migration("20240824164455_MiniStore-Adding-Model-Auth")]
+    partial class MiniStoreAddingModelAuth
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

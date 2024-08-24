@@ -37,9 +37,7 @@ namespace MiniStore.Data.Migrations
                         .HasColumnName("End At");
 
                     b.Property<string>("ShiftId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("Shift Id");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<TimeOnly>("StartAt")
                         .HasColumnType("time")
@@ -382,13 +380,9 @@ namespace MiniStore.Data.Migrations
 
             modelBuilder.Entity("MiniStore.Models.Calender", b =>
                 {
-                    b.HasOne("MiniStore.Models.Shift", "Shift")
+                    b.HasOne("MiniStore.Models.Shift", null)
                         .WithMany("Calenders")
-                        .HasForeignKey("ShiftId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Shift");
+                        .HasForeignKey("ShiftId");
                 });
 
             modelBuilder.Entity("MiniStore.Models.Coupon", b =>

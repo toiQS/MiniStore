@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MiniStore.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class MiniStoreAddingModel : Migration
+    public partial class MiniStoreAddingModels : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -75,17 +75,16 @@ namespace MiniStore.Data.Migrations
                     Dayofweek = table.Column<int>(name: "Day of week", type: "int", nullable: false),
                     StatAt = table.Column<TimeOnly>(name: "Stat At", type: "time", nullable: false),
                     EndAt = table.Column<TimeOnly>(name: "End At", type: "time", nullable: false),
-                    ShiftId = table.Column<string>(name: "Shift Id", type: "nvarchar(450)", nullable: false)
+                    ShiftId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Calender", x => x.CalenderId);
                     table.ForeignKey(
-                        name: "FK_Calender_Shift_Shift Id",
+                        name: "FK_Calender_Shift_ShiftId",
                         column: x => x.ShiftId,
                         principalTable: "Shift",
-                        principalColumn: "Shift Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Shift Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -261,9 +260,9 @@ namespace MiniStore.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Calender_Shift Id",
+                name: "IX_Calender_ShiftId",
                 table: "Calender",
-                column: "Shift Id");
+                column: "ShiftId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Coupon_Style Item Id",

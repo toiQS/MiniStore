@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MiniStore.Data.Migrations.AuthDb
 {
     /// <inheritdoc />
-    public partial class MiniStoreAddAuth : Migration
+    public partial class MiniStoreAddingModelAuth : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
