@@ -38,7 +38,7 @@ namespace MiniStore.Services.Repository
             try
             {
                 var data = await _dbSet.AsNoTracking().ToListAsync();
-                return data ?? Enumerable.Empty<T>();
+                return data;
             }
             catch (Exception ex)
             {
