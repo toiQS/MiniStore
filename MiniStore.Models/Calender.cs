@@ -21,9 +21,9 @@ namespace MiniStore.Models
         [Column(name: "End At")]
         public TimeOnly EndAt { get; set; }
 
-        [Column(name:"Shift Id")]
-        [ForeignKey(nameof(Shift))]
-        public string ShiftId { get; set; } = string.Empty;
-        public virtual Shift Shift { get; set; }
+        //[Column(name: "Shift Id")]
+        //[ForeignKey(nameof(Shift))]
+        //public string ShiftId { get; set; } = string.Empty;
+        //public virtual Shift Shift { get; set; }
     }
 }
