@@ -4,6 +4,7 @@ using MiniStore.Data;
 using MiniStore.Models;
 using MiniStore.Services.receipt;
 using MiniStore.Services.repository;
+using MiniStore.Services.Repository;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,6 +21,11 @@ namespace MiniStore.Services.receipt
         private readonly ApplicationDbContext _context;
         private readonly IRepository<Receipt> _repository;
         private static string _path = string.Empty;
+        public ReceiptServices(ApplicationDbContext context)
+        {
+            _context = context;
+            _repository = new Repository<Receipt>(context);
+        }
         public ReceiptServices(ApplicationDbContext context, IRepository<Receipt> repository)
         {
             _repository = repository;
