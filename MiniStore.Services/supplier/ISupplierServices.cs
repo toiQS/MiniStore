@@ -16,7 +16,7 @@ namespace MiniStore.Services.supplier
         public Task<IEnumerable<Supplier>> GetSupplierByText(string text);
         public Task<bool> AddSupplier(Supplier supplier);
         public Task<bool> RemoveSupplier(string supplierId);
-        public Task<bool> EditStatusAndArchive(string supplierId);
+        public Task<bool> EditStatusAndArchive(string supplierId, bool status);
         public Task<bool> UpdateSupplier(string supplierId, Supplier supplier);
 
     }
