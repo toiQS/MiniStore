@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MiniStore.Data;
 using MiniStore.Services.receipt;
+using MiniStore.Services.supplier;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -9,14 +10,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 // Add services to the container.
 
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IApplicationBuilder, ApplicationBuilder>();
+//builder.Services.AddScoped<IApplicationBuilder, ApplicationBuilder>();
 
+builder.Services.AddScoped<ISupplierServices, SupplierServices>();
 builder.Services.AddScoped<IReceiptServices, ReceiptServices>();
 
 var app = builder.Build();
