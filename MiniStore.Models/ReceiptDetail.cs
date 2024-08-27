@@ -25,5 +25,7 @@ namespace MiniStore.Models
         [Column(name:"Item Id")]
         public string ItemId { get; set; } = string.Empty;
         public virtual Item Item { get; set; }
+        
+        public int Quantity { get; set; }
     }
 }
