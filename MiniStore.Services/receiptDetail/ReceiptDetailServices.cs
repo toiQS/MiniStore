@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using MiniStore.Data;
 using MiniStore.Models;
 using MiniStore.Services.repository;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MiniStore.Services.receiptDetail
 {
-    class ReceiptDetailServices
+    class ReceiptDetailServices: IReceiptDetailServices
     {
         private readonly ApplicationDbContext _context;
         private IRepository<ReceiptDetail> _receiptDetailRepository;
@@ -58,8 +59,8 @@ namespace MiniStore.Services.receiptDetail
         // add new a receipt detail
         public async Task<bool> AddReceipt(ReceiptDetail receiptDetail)
         {
-            
-            var IsItemExist = await _context.Item.AnyAsync(x => x.ItemId == receiptDetail.ItemId);
+            // add quantity of item when it was exist
+            var IsItemExist = await _context.Item.AnyAsync(x => x.ItemId == receiptDetail.ItemId && x.Status == true);
             if (IsItemExist)
             {
                 var result = await _receiptDetailRepository.Add(receiptDetail);
@@ -83,7 +84,7 @@ namespace MiniStore.Services.receiptDetail
                    .AsNoTracking()
                    .FirstOrDefaultAsync(x => x.ReceiptDetailId == id);
             if (data == null) return false;
-            var IsItemExist = await _context.Item.AnyAsync(x => x.ItemId == data.ItemId);
+            var IsItemExist = await _context.Item.AnyAsync(x => x.ItemId == data.ItemId && x.Status == true);
             if (IsItemExist)
             {
                 var result = await _receiptDetailRepository.Delete(data);
@@ -100,7 +101,7 @@ namespace MiniStore.Services.receiptDetail
         }
         // update a receipt detail was existed in database
 
-        public async Task<bool> UpdateReceipt(string id, ReceiptDetail receiptDetail)
+        public async Task<bool> UpdateReceipt(string id, int quantity)
         {
             // is data of old receipt detail
             // update item id and quanity if data of receipt is existed
@@ -111,23 +112,20 @@ namespace MiniStore.Services.receiptDetail
 
 
             // only update quantity of item
-            if (data.ItemId == receiptDetail.ItemId)
+            
+            var IsItemExist = await _context.Item.AnyAsync(x => x.ItemId == data.ItemId && x.Status == true);
+            if (IsItemExist)
             {
-                data.Quantity = receiptDetail.Quantity;
-                var IsItemExist = await _context.Item.AnyAsync(x => x.ItemId == data.ItemId);
-                if (IsItemExist)
+                var result = await _receiptDetailRepository.Update(data);
+                var dataItem = await _context.Item.FirstOrDefaultAsync(x => x.ItemId == data.ItemId);
+                if (dataItem == null)
                 {
-                    var result = await _receiptDetailRepository.Update(data);
-                    var dataItem = await _context.Item.FirstOrDefaultAsync(x => x.ItemId == data.ItemId);
-                    if (dataItem == null)
-                    {
-                        return false;
-                    }
-                    // change based on the difference between new and old data
-                    dataItem.Quantity += (data.Quantity - receiptDetail.Quantity);
-                    await _itemRepository.Update(dataItem);
-                    return result;
+                    return false;
                 }
+                // change based on the difference between new and old data
+                dataItem.Quantity += (data.Quantity - quantity);
+                await _itemRepository.Update(dataItem);
+                return result;
             }
             return false;
         }

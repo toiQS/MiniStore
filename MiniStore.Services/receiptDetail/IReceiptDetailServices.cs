@@ -13,6 +13,6 @@ namespace MiniStore.Services.receiptDetail
         public Task<ReceiptDetail> GetReceiptDetailAsync(string id);
         public Task<bool> AddReceipt(ReceiptDetail receiptDetail);
         public Task<bool> RemoveReceipt(string id);
-        public Task<bool> UpdateReceipt(string id, ReceiptDetail receiptDetail);
+        public Task<bool> UpdateReceipt(string id, int quantity);
     }
 }
