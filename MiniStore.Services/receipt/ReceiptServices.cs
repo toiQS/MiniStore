@@ -25,18 +25,21 @@ namespace MiniStore.Services.receipt
         {
             _context = context;
             _repository = new Repository<Receipt>(context);
+            _path = _repository.GetPath("receipt", "LogReceiptFile.txt");
+
         }
         public ReceiptServices(ApplicationDbContext context, IRepository<Receipt> repository)
         {
             _repository = repository;
             _context = context;
+            _path = _repository.GetPath("receipt", "LogReceiptFile.txt");
 
         }
 
         // Get all receipts asynchronously
         public async Task<IEnumerable<Receipt>> GetReceiptsAsync()
         {
-            _path = _repository.GetPath("receipt", "LogReceiptFile.txt");
+            
             var receipts = await _repository.GetAll();
             return receipts;
         }
@@ -44,7 +47,7 @@ namespace MiniStore.Services.receipt
         // Get a specific receipt by its ID asynchronously
         public async Task<Receipt> GetReceiptAsync(string id)
         {
-            _path = _repository.GetPath("receipt", "LogReceiptFile.txt");
+            
             try
             {
                 var receipt = await _context.Receipt
@@ -63,7 +66,7 @@ namespace MiniStore.Services.receipt
         // Get receipts that match a text pattern asynchronously
         public async Task<IEnumerable<Receipt>> GetReceiptByText(string text)
         {
-            _path = _repository.GetPath("receipt", "LogReceiptFile.txt");
+            
             try
             {
                 var receipts = await _context.Receipt
@@ -84,14 +87,14 @@ namespace MiniStore.Services.receipt
         // Create a new receipt asynchronously
         public async Task<bool> Create(Receipt receipt)
         {
-            _path = _repository.GetPath("receipt", "LogReceiptFile.txt");
+            
             return await _repository.Add(receipt);
         }
 
         // Remove a receipt by its ID asynchronously
         public async Task<bool> Remove(string receiptId)
         {
-            _path = _repository.GetPath("receipt", "LogReceiptFile.txt");
+            
             var receipt = await _context.Receipt
                 .AsTracking()
                 .FirstOrDefaultAsync(x => x.ReceiptId == receiptId)
@@ -105,7 +108,7 @@ namespace MiniStore.Services.receipt
         // Update an existing receipt asynchronously
         public async Task<bool> Update(string receiptId, Receipt newReceipt)
         {
-            _path = _repository.GetPath("receipt", "LogReceiptFile.txt");
+            
             var receipt = await _context.Receipt
                 .AsTracking()
                 .FirstOrDefaultAsync(x => x.ReceiptId == receiptId)
