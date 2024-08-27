@@ -14,44 +14,40 @@ namespace MiniStore.Services.item
     public class ItemServices : IItemServices
     {
         private readonly ApplicationDbContext _context;
-        private IRepository<Item> _repository;
-        private string _path;
+        private readonly IRepository<Item> _repository;
+        private readonly string _path;
+
+        // Constructor for Unit Test
         public ItemServices(ApplicationDbContext context, IRepository<Item> repository, string path)
         {
-            _context = context;
-            _repository = repository;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _path = _repository.GetPath("item", "LogItemService.txt");
         }
+
+        // Constructor for Api Controller
         public ItemServices(ApplicationDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _repository = new Repository<Item>(_context);
             _path = _repository.GetPath("item", "LogItemService.txt");
         }
+
+        // Fetch all items from the database
         public async Task<IEnumerable<Item>> GetItemsAsync()
         {
-            var data = await _repository.GetAll();
-            return data;
+            return await _repository.GetAll();
         }
+
+        // Fetch all items with Status = true
         public async Task<IEnumerable<Item>> GetItemsStatusIsTrueAsync()
         {
             try
             {
-                var data = await _context.Item.AsNoTracking().Where(x => x.Status == true).ToListAsync();
-                return data;
-            }
-            catch (Exception ex)
-            {
-                await LogErrorAsync(ex);
-                throw;
-            }
-        }
-        public async Task<IEnumerable<Item>> GetItemsStatusIsFalseAsync()
-        {
-            try
-            {
-                var data = await _context.Item.AsNoTracking().Where(x => x.Status == false).ToListAsync();
-                return data;
+                return await _context.Item
+                                     .AsNoTracking()
+                                     .Where(x => x.Status == true)
+                                     .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -60,12 +56,15 @@ namespace MiniStore.Services.item
             }
         }
 
-        public async Task<Item> GetItemAsync(string id)
+        // Fetch all items with Status = false
+        public async Task<IEnumerable<Item>> GetItemsStatusIsFalseAsync()
         {
             try
             {
-                var data = await _context.Item.AsNoTracking().FirstOrDefaultAsync(x => x.ItemId == id);
-                return data;
+                return await _context.Item
+                                     .AsNoTracking()
+                                     .Where(x => x.Status == false)
+                                     .ToListAsync();
             }
             catch (Exception ex)
             {
@@ -73,38 +72,74 @@ namespace MiniStore.Services.item
                 throw;
             }
         }
-        public async Task<IEnumerable<Item>> GetItemsAsyncByText(string text)
+
+        // Fetch a single item by its ID
+        public async Task<Item> GetItemAsync(string id)
         {
             try
             {
-                var data = await _context.Item.AsNoTracking().Where(x => x.ItemName.ToLower().Contains(text.ToLower())).ToListAsync();
-                return data;
+                return await _context.Item
+                                     .AsNoTracking()
+                                     .FirstOrDefaultAsync(x => x.ItemId == id);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await LogErrorAsync(ex);
                 throw;
             }
         }
+
+        // Fetch items by a search text (searches in item name)
+        public async Task<IEnumerable<Item>> GetItemsAsyncByText(string text)
+        {
+            try
+            {
+                return await _context.Item
+                                     .AsNoTracking()
+                                     .Where(x => x.ItemName.ToLower().Contains(text.ToLower()))
+                                     .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                await LogErrorAsync(ex);
+                throw;
+            }
+        }
+
+        // Add a new item to the database
         public async Task<bool> Add(Item item)
         {
             return await _repository.Add(item);
         }
 
+        // Toggle the status of an item by its ID
         public async Task<bool> UpdateStatus(string itemId)
         {
-            var data = await _context.Item.AsTracking().FirstOrDefaultAsync(x => x.ItemId == itemId);
+            var data = await _context.Item
+                                     .AsTracking()
+                                     .FirstOrDefaultAsync(x => x.ItemId == itemId);
+
+            if (data == null) return false;
+
             data.Status = !data.Status;
             return await _repository.Update(data);
         }
+
+        // Update item details
         public async Task<bool> Update(string itemId, string itemName, string styleItemId)
         {
-            var data = await _context.Item.AsTracking().FirstOrDefaultAsync(x => x.ItemId == itemId);
+            var data = await _context.Item
+                                     .AsTracking()
+                                     .FirstOrDefaultAsync(x => x.ItemId == itemId);
+
             if (data == null) return false;
+
             data.ItemName = itemName;
             data.StyleItemId = styleItemId;
             return await _repository.Update(data);
         }
+
+        // Log error details to a file asynchronously
         private async Task LogErrorAsync(Exception ex)
         {
             var errorDetails = new StringBuilder();

@@ -3,10 +3,13 @@ using MiniStore.API.Models;
 using MiniStore.API.Models.supplier;
 using MiniStore.Models;
 using MiniStore.Services.supplier;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MiniStore.API.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class SupplierController : ControllerBase
     {
@@ -22,14 +25,16 @@ namespace MiniStore.API.Controllers
         public async Task<IActionResult> GetAllSupplier()
         {
             var result = await _supplierServices.GetSuppliersAsync();
-            if (result == null)
-                return Ok(ServiceResult<IEnumerable<SupplierModelResponse>>.FailedResult("Data was null"));
+            if (result == null || !result.Any())
+            {
+                return NotFound(ServiceResult<IEnumerable<SupplierModelResponse>>.FailedResult("No suppliers found."));
+            }
 
-            var data = result.Select(x => new SupplierModelResponse()
+            var data = result.Select(x => new SupplierModelResponse
             {
                 SupplierName = x.SupplierName,
                 Status = x.Status,
-                SupplierId = x.SupplierId,
+                SupplierId = x.SupplierId
             }).ToList();
 
             return Ok(ServiceResult<IEnumerable<SupplierModelResponse>>.SuccessResult(data));
@@ -37,17 +42,19 @@ namespace MiniStore.API.Controllers
 
         // Retrieves suppliers with status true asynchronously
         [HttpGet("status=true")]
-        public async Task<IActionResult> GetSuppliersAsyncWithStatusIsTrue()
+        public async Task<IActionResult> GetSuppliersWithStatusTrue()
         {
             var result = await _supplierServices.GetSuppliersAsyncWithStatusIsTrue();
-            if (result == null)
-                return Ok(ServiceResult<IEnumerable<SupplierModelResponse>>.FailedResult("Data was null"));
+            if (result == null || !result.Any())
+            {
+                return NotFound(ServiceResult<IEnumerable<SupplierModelResponse>>.FailedResult("No active suppliers found."));
+            }
 
-            var data = result.Select(x => new SupplierModelResponse()
+            var data = result.Select(x => new SupplierModelResponse
             {
                 SupplierName = x.SupplierName,
                 Status = x.Status,
-                SupplierId = x.SupplierId,
+                SupplierId = x.SupplierId
             }).ToList();
 
             return Ok(ServiceResult<IEnumerable<SupplierModelResponse>>.SuccessResult(data));
@@ -55,38 +62,44 @@ namespace MiniStore.API.Controllers
 
         // Retrieves suppliers with status false asynchronously
         [HttpGet("status=false")]
-        public async Task<IActionResult> GetSuppliersAsyncWithStatusIsFalse()
+        public async Task<IActionResult> GetSuppliersWithStatusFalse()
         {
             var result = await _supplierServices.GetSuppliersAsyncWithStatusIsFalse();
-            if (result == null)
-                return Ok(ServiceResult<IEnumerable<SupplierModelResponse>>.FailedResult("Data was null"));
+            if (result == null || !result.Any())
+            {
+                return NotFound(ServiceResult<IEnumerable<SupplierModelResponse>>.FailedResult("No inactive suppliers found."));
+            }
 
-            var data = result.Select(x => new SupplierModelResponse()
+            var data = result.Select(x => new SupplierModelResponse
             {
                 SupplierName = x.SupplierName,
                 Status = x.Status,
-                SupplierId = x.SupplierId,
+                SupplierId = x.SupplierId
             }).ToList();
 
             return Ok(ServiceResult<IEnumerable<SupplierModelResponse>>.SuccessResult(data));
         }
 
         // Retrieves a specific supplier by ID asynchronously
-        [HttpGet("{id}")]
+        [HttpGet("{supplierId}")]
         public async Task<IActionResult> GetSupplierByIdAsync(string supplierId)
         {
             if (string.IsNullOrEmpty(supplierId))
-                return Ok(ServiceResult<SupplierModelResponse>.FailedResult("Supplier ID was null"));
+            {
+                return BadRequest(ServiceResult<SupplierModelResponse>.FailedResult("Supplier ID was null or empty."));
+            }
 
             var data = await _supplierServices.GetSupplierByIdAsync(supplierId);
             if (data == null)
-                return Ok(ServiceResult<SupplierModelResponse>.FailedResult("Supplier not found"));
-
-            var result = new SupplierModelResponse()
             {
-                Status = data.Status,
+                return NotFound(ServiceResult<SupplierModelResponse>.FailedResult("Supplier not found."));
+            }
+
+            var result = new SupplierModelResponse
+            {
                 SupplierName = data.SupplierName,
-                SupplierId = data.SupplierId,
+                Status = data.Status,
+                SupplierId = data.SupplierId
             };
 
             return Ok(ServiceResult<SupplierModelResponse>.SuccessResult(result));
@@ -97,17 +110,21 @@ namespace MiniStore.API.Controllers
         public async Task<IActionResult> GetSupplierByText(string text)
         {
             if (string.IsNullOrEmpty(text))
-                return Ok(ServiceResult<SupplierModelResponse>.FailedResult("Search text was null"));
+            {
+                return BadRequest(ServiceResult<IEnumerable<SupplierModelResponse>>.FailedResult("Search text was null or empty."));
+            }
 
             var result = await _supplierServices.GetSupplierByText(text);
-            if (result == null)
-                return Ok(ServiceResult<IEnumerable<SupplierModelResponse>>.FailedResult("Data was null"));
+            if (result == null || !result.Any())
+            {
+                return NotFound(ServiceResult<IEnumerable<SupplierModelResponse>>.FailedResult("No suppliers found matching the search text."));
+            }
 
-            var data = result.Select(x => new SupplierModelResponse()
+            var data = result.Select(x => new SupplierModelResponse
             {
                 SupplierName = x.SupplierName,
                 Status = x.Status,
-                SupplierId = x.SupplierId,
+                SupplierId = x.SupplierId
             }).ToList();
 
             return Ok(ServiceResult<IEnumerable<SupplierModelResponse>>.SuccessResult(data));
@@ -117,80 +134,88 @@ namespace MiniStore.API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddSupplier(SupplierModelRequest supplier)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || supplier == null)
             {
-                return Ok(ServiceResult<SupplierModelRequest>.FailedResult("Invalid data"));
+                return BadRequest(ServiceResult<SupplierModelRequest>.FailedResult("Invalid supplier data."));
             }
 
-            var newSupplier = new Supplier()
+            var newSupplier = new Supplier
             {
-                SupplierId = $"S{DateTime.Now}", // Example Supplier ID generation, consider adjusting
+                SupplierId = $"S{DateTime.Now:yyyyMMddHHmmss}", // Unique ID with timestamp
                 SupplierName = supplier.SupplierName,
                 Status = true,
                 SupplierAddress = supplier.SupplierAddress,
                 SupplierEmail = supplier.SupplierEmail,
-                SupplierPhone = supplier.SupplierPhone,
+                SupplierPhone = supplier.SupplierPhone
             };
 
             var result = await _supplierServices.AddSupplier(newSupplier);
             if (!result)
-                return Ok(ServiceResult<SupplierModelRequest>.FailedResult("Failed to add supplier"));
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServiceResult<SupplierModelRequest>.FailedResult("Failed to add supplier."));
+            }
 
-            return Ok(ServiceResult<SupplierModelRequest>.SuccessResult(supplier));
+            return CreatedAtAction(nameof(GetSupplierByIdAsync), new { supplierId = newSupplier.SupplierId }, ServiceResult<SupplierModelRequest>.SuccessResult(supplier));
         }
 
         // Removes a supplier by ID asynchronously
-        [HttpDelete("{id}")]
+        [HttpDelete("{supplierId}")]
         public async Task<IActionResult> RemoveSupplier(string supplierId)
         {
             if (string.IsNullOrEmpty(supplierId))
             {
-                return Ok(ServiceResult<bool>.FailedResult("Supplier ID was null"));
+                return BadRequest(ServiceResult<bool>.FailedResult("Supplier ID was null or empty."));
             }
 
             var result = await _supplierServices.RemoveSupplier(supplierId);
             if (!result)
-                return Ok(ServiceResult<bool>.FailedResult("Failed to remove supplier"));
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServiceResult<bool>.FailedResult("Failed to remove supplier."));
+            }
 
-            return Ok(ServiceResult<bool>.SuccessResult(true));
+            return NoContent();
         }
 
-        // Edits the status and archives a supplier asynchronously
+        // Edits the status of a supplier asynchronously
         [HttpPut("EditStatus")]
-        public async Task<IActionResult> EditStatusAndArchive(string supplierId, bool status)
+        public async Task<IActionResult> EditStatusAndArchive([FromQuery] string supplierId, [FromQuery] bool status)
         {
-            if (string.IsNullOrEmpty(supplierId) || !ModelState.IsValid)
+            if (string.IsNullOrEmpty(supplierId))
             {
-                return Ok(ServiceResult<bool>.FailedResult("Invalid data"));
+                return BadRequest(ServiceResult<bool>.FailedResult("Supplier ID was null or empty."));
             }
 
             var result = await _supplierServices.EditStatusAndArchive(supplierId, status);
             if (!result)
-                return Ok(ServiceResult<bool>.FailedResult("Failed to edit status"));
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServiceResult<bool>.FailedResult("Failed to update supplier status."));
+            }
 
             return Ok(ServiceResult<bool>.SuccessResult(true));
         }
 
         // Updates an existing supplier by ID asynchronously
-        [HttpPut("{id}")]
+        [HttpPut("{supplierId}")]
         public async Task<IActionResult> UpdateSupplier(string supplierId, SupplierModelRequest supplier)
         {
-            if (string.IsNullOrEmpty(supplierId) || !ModelState.IsValid)
+            if (string.IsNullOrEmpty(supplierId) || !ModelState.IsValid || supplier == null)
             {
-                return Ok(ServiceResult<bool>.FailedResult("Invalid data"));
+                return BadRequest(ServiceResult<bool>.FailedResult("Invalid data or supplier ID."));
             }
 
-            var updatedSupplier = new Supplier()
+            var updatedSupplier = new Supplier
             {
                 SupplierName = supplier.SupplierName,
                 SupplierAddress = supplier.SupplierAddress,
                 SupplierEmail = supplier.SupplierEmail,
-                SupplierPhone = supplier.SupplierPhone,
+                SupplierPhone = supplier.SupplierPhone
             };
 
             var result = await _supplierServices.UpdateSupplier(supplierId, updatedSupplier);
             if (!result)
-                return Ok(ServiceResult<bool>.FailedResult("Failed to update supplier"));
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ServiceResult<bool>.FailedResult("Failed to update supplier."));
+            }
 
             return Ok(ServiceResult<bool>.SuccessResult(true));
         }

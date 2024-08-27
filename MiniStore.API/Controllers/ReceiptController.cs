@@ -3,6 +3,9 @@ using MiniStore.API.Models;
 using MiniStore.API.Models.receipt;
 using MiniStore.Models;
 using MiniStore.Services.receipt;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace MiniStore.API.Controllers
 {
@@ -61,9 +64,9 @@ namespace MiniStore.API.Controllers
             }
 
             var result = await _receiptServices.GetReceiptByText(text);
-            if (result == null)
+            if (result == null || !result.Any())
             {
-                return Ok(ServiceResult<IEnumerable<ReceiptModelResponse>>.FailedResult("Can't find or data doesn't exist"));
+                return Ok(ServiceResult<IEnumerable<ReceiptModelResponse>>.FailedResult("Can't find data or data doesn't exist"));
             }
 
             var data = result.Select(x => new ReceiptModelResponse()
@@ -84,7 +87,7 @@ namespace MiniStore.API.Controllers
             {
                 var newReceipt = new Receipt()
                 {
-                    ReceiptId = $"R{DateTime.Now}", // Example Receipt ID generation, consider adjusting to your needs
+                    ReceiptId = $"R{DateTime.Now:yyyyMMddHHmmss}", // Receipt ID generation with timestamp for uniqueness
                     CreateAt = request.CreateAt,
                     SupplierID = request.SupplierID,
                 };
@@ -102,15 +105,15 @@ namespace MiniStore.API.Controllers
         }
 
         // Removes a receipt by its ID asynchronously
-        [HttpDelete]
-        public async Task<IActionResult> RemoveReceipt(string Id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> RemoveReceipt(string id)
         {
-            if (string.IsNullOrEmpty(Id))
+            if (string.IsNullOrEmpty(id))
             {
                 return Ok(ServiceResult<bool>.FailedResult("Id was null"));
             }
 
-            var result = await _receiptServices.Remove(Id);
+            var result = await _receiptServices.Remove(id);
             if (!result)
             {
                 return Ok(ServiceResult<bool>.FailedResult("Can't remove data"));
@@ -120,10 +123,10 @@ namespace MiniStore.API.Controllers
         }
 
         // Updates an existing receipt by its ID asynchronously
-        [HttpPut]
-        public async Task<IActionResult> UpdateReceipt(string Id, ReceiptModelRequest request)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateReceipt(string id, ReceiptModelRequest request)
         {
-            if (string.IsNullOrEmpty(Id) || request == null)
+            if (string.IsNullOrEmpty(id) || request == null)
             {
                 return Ok(ServiceResult<bool>.FailedResult("Id was null or receipt was invalid"));
             }
@@ -134,7 +137,7 @@ namespace MiniStore.API.Controllers
                 SupplierID = request.SupplierID,
             };
 
-            var result = await _receiptServices.Update(Id, data);
+            var result = await _receiptServices.Update(id, data);
             if (!result)
             {
                 return Ok(ServiceResult<bool>.FailedResult("Can't update data"));
