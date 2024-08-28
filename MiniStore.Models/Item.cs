@@ -22,5 +22,8 @@ namespace MiniStore.Models
         [Column(name: "Style Item Id")]
         public string StyleItemId {  get; set; } = string.Empty;
         public StyleItem StyleItem {  get; set; }
+        [ForeignKey(nameof(Supplier))]
+        public string SupplierId { get; set; }= string.Empty;
+        public virtual Supplier Supplier {  get; set; }
     }
 }

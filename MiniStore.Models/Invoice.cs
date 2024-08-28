@@ -24,12 +24,5 @@ namespace MiniStore.Models
         [Column(name: "Customer Id")]
         public string CustomerId { get; set; } = string.Empty;
         public Customer Customer { get; set; }
-
-        //public Customer? Customer { get; set; }
-
-        [ForeignKey(nameof(Coupon))]
-        [Column(name:"Coupon Id")]
-        public string? CouponId { get;set; } = string.Empty;
-        public Coupon? Coupon { get; set; }
     }
 }
