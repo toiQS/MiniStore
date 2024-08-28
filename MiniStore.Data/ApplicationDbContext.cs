@@ -10,17 +10,12 @@ namespace MiniStore.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-        //public DbSet<Calender> Calender { get; set; }
-        public DbSet<Coupon> Coupon { get; set; }
+        //public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
         public DbSet<Customer> Customer { get; set; }
         public DbSet<Employee> Employee { get; set; }
         public DbSet<Invoice> Invoice { get; set; }
         public DbSet<InvoiceDetail> InvoiceDetail { get; set; }
         public DbSet<Item> Item { get; set; }
-        public DbSet<Receipt> Receipt { get; set; }
-        public DbSet<ReceiptDetail> ReceiptDetail { get; set; }
-        public DbSet<Shift> Shift { get; set; }
         public DbSet<StyleItem> StyleItem { get; set; }
         public DbSet<Supplier> Supplier { get; set; }
 

@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using MiniStore.Data;
-using MiniStore.Services.receipt;
 using MiniStore.Services.supplier;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,7 +17,6 @@ builder.Services.AddSwaggerGen();
 //builder.Services.AddScoped<IApplicationBuilder, ApplicationBuilder>();
 
 builder.Services.AddScoped<ISupplierServices, SupplierServices>();
-builder.Services.AddScoped<IReceiptServices, ReceiptServices>();
 
 var app = builder.Build();
 
