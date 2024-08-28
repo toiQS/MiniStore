@@ -90,7 +90,7 @@ namespace MiniStore.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ServiceResult<ReceiptDetailModelRequest>.FailedResult("Can't add data"));
             }
 
-            return CreatedAtAction(nameof(GetReceiptDetailAsync), new { id = newReceiptDetail.ReceiptDetailId }, request);
+            return Ok(ServiceResult<bool>.SuccessResult(result));
         }
 
         // Removes a receipt detail by its ID asynchronously
