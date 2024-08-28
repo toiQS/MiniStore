@@ -3,6 +3,7 @@ using MiniStore.Data;
 using MiniStore.Models;
 using MiniStore.Services.repository;
 using MiniStore.Services.Repository;
+using System.Data.Common;
 using System.Text;
 
 namespace MiniStore.Services.supplier
@@ -123,7 +124,7 @@ namespace MiniStore.Services.supplier
         }
 
         // Edit the status of a supplier and archive it
-        public async Task<bool> EditStatusAndArchive(string supplierId, bool status)
+        public async Task<bool> EditStatusAndArchive(string supplierId)
         {
             var data = await _context.Supplier
                                      .Where(x => x.SupplierId == supplierId)
@@ -131,7 +132,7 @@ namespace MiniStore.Services.supplier
                                      .FirstOrDefaultAsync();
             if (data == null) return false;
 
-            data.Status = status;
+            data.Status = !data.Status;
             return await _repository.Update(data);
         }
 

@@ -155,7 +155,7 @@ namespace MiniStore.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, ServiceResult<SupplierModelRequest>.FailedResult("Failed to add supplier."));
             }
 
-            return CreatedAtAction(nameof(GetSupplierByIdAsync), new { supplierId = newSupplier.SupplierId }, ServiceResult<SupplierModelRequest>.SuccessResult(supplier));
+            return Ok(ServiceResult<SupplierModelRequest>.SuccessResult(supplier));
         }
 
         // Removes a supplier by ID asynchronously
@@ -178,14 +178,14 @@ namespace MiniStore.API.Controllers
 
         // Edits the status of a supplier asynchronously
         [HttpPut("EditStatus")]
-        public async Task<IActionResult> EditStatusAndArchive([FromQuery] string supplierId, [FromQuery] bool status)
+        public async Task<IActionResult> EditStatusAndArchive([FromQuery] string supplierId)
         {
             if (string.IsNullOrEmpty(supplierId))
             {
                 return BadRequest(ServiceResult<bool>.FailedResult("Supplier ID was null or empty."));
             }
 
-            var result = await _supplierServices.EditStatusAndArchive(supplierId, status);
+            var result = await _supplierServices.EditStatusAndArchive(supplierId);
             if (!result)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ServiceResult<bool>.FailedResult("Failed to update supplier status."));
