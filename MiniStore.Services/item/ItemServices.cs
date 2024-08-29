@@ -169,6 +169,15 @@ namespace MiniStore.Services.item
             return await _repository.Delete(data);
         }
 
+        public async Task<bool> Sell(string itemId, int quantity)
+        {
+            var data = await _context.Item
+                                     .AsTracking()
+                                     .FirstOrDefaultAsync(x => x.ItemId == itemId);
+            if (data == null) return false;
+            data.Quantity -= quantity;
+            return await _repository.Update(data);
+        }
         // Logs error details to a file asynchronously.
         private async Task LogErrorAsync(Exception ex)
         {

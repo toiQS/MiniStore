@@ -19,5 +19,7 @@ namespace MiniStore.Services.item
         public Task<bool> UpdateInfoItem(string itemId, string itemName, string styleItemId, string supplierId);
         public Task<bool> DeleteItemAsync(string itemId);
         public Task<bool> UpdateStatusItem(string itemId);
+        public Task<bool> Sell(string itemId, int quantity);
+
     }
 }
