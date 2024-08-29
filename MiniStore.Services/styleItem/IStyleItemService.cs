@@ -16,6 +16,6 @@ namespace MiniStore.Services.styleItem
         public Task<bool> Remove(string styleItemId);
         public Task<bool> Update(string styleItemId, string styleItemDescriptiontyle, string styleItemName);
         public Task<bool> Update(string styleItemId);
-        
+
     }
 }

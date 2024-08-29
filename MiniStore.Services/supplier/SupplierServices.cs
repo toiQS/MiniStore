@@ -106,8 +106,17 @@ namespace MiniStore.Services.supplier
         }
 
         // Add a new supplier to the database
-        public async Task<bool> AddSupplier(Supplier supplier)
+        public async Task<bool> AddSupplier(string supplierName, string supplierPhone, string supplierEmail, string supplierAddress)
         {
+            var supplier = new Supplier()
+            {
+                SupplierId = $"S{DateTime.Now}",
+                SupplierName = supplierName ,
+                Status = true ,
+                SupplierAddress = supplierAddress , 
+                SupplierEmail = supplierEmail ,
+                SupplierPhone = supplierPhone ,
+            };
             return await _repository.Add(supplier);
         }
 
@@ -137,7 +146,7 @@ namespace MiniStore.Services.supplier
         }
 
         // Update supplier information
-        public async Task<bool> UpdateSupplier(string supplierId, Supplier supplier)
+        public async Task<bool> UpdateSupplier(string supplierId, string supplierName, string supplierPhone, string supplierEmail, string supplierAddress)
         {
             var data = await _context.Supplier
                                      .Where(x => x.SupplierId == supplierId)
@@ -145,10 +154,10 @@ namespace MiniStore.Services.supplier
                                      .FirstOrDefaultAsync();
             if (data == null) return false;
 
-            data.SupplierName = supplier.SupplierName;
-            data.SupplierPhone = supplier.SupplierPhone;
-            data.SupplierEmail = supplier.SupplierEmail;
-            data.SupplierAddress = supplier.SupplierAddress;
+            data.SupplierName = supplierName;
+            data.SupplierPhone = supplierPhone;
+            data.SupplierEmail = supplierEmail;
+            data.SupplierAddress = supplierAddress;
 
             return await _repository.Update(data);
         }

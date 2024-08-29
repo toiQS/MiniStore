@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MiniStore.Data;
+using MiniStore.Services.item;
+using MiniStore.Services.styleItem;
 using MiniStore.Services.supplier;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +19,10 @@ builder.Services.AddSwaggerGen();
 //builder.Services.AddScoped<IApplicationBuilder, ApplicationBuilder>();
 
 builder.Services.AddScoped<ISupplierServices, SupplierServices>();
+builder.Services.AddScoped<IApplicationBuilder, ApplicationBuilder>();
+builder.Services.AddScoped<IItemServices, ItemServices>();
+builder.Services.AddScoped<IStyleItemService, StyleItemService>();
+
 
 var app = builder.Build();
 

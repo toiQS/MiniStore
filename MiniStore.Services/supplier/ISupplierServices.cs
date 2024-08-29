@@ -14,10 +14,10 @@ namespace MiniStore.Services.supplier
         public Task<IEnumerable<Supplier>> GetSuppliersAsyncWithStatusIsFalse();
         public Task<Supplier> GetSupplierByIdAsync(string supplierId);
         public Task<IEnumerable<Supplier>> GetSupplierByText(string text);
-        public Task<bool> AddSupplier(Supplier supplier);
+        public Task<bool> AddSupplier(string supplierName, string supplierPhone, string supplierEmail, string supplierAddress);
         public Task<bool> RemoveSupplier(string supplierId);
         public Task<bool> EditStatusAndArchive(string supplierId);
-        public Task<bool> UpdateSupplier(string supplierId, Supplier supplier);
+        public Task<bool> UpdateSupplier(string supplierId, string supplierName, string supplierPhone, string supplierEmail, string supplierAddress);
 
     }
 }
