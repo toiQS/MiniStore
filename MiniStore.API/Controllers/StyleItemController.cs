@@ -79,24 +79,16 @@ namespace MiniStore.API.Controllers
 
         // POST: api/StyleItem
         [HttpPost]
-        public async Task<IActionResult> Add(StyleItemModelRequest styleItem)
+        public async Task<IActionResult> Add(string styleItemName, string styleItemDescription)
         {
-            if (styleItem == null || !ModelState.IsValid)
+            if (string.IsNullOrEmpty(styleItemName) || string.IsNullOrEmpty(styleItemDescription) || !ModelState.IsValid)
                 return BadRequest(ServiceResult<bool>.FailedResult("Data was invalid or null"));
 
-            var data = new StyleItem
-            {
-                StyleItemName = styleItem.StyleItemName,
-                Status = true,
-                StyleItemDescription = styleItem.StyleItemDescription,
-                StyleItemId = $"SI{DateTime.UtcNow.Ticks}", // Use a more unique identifier
-            };
-
-            var result = await _styleItemService.Add(data);
+            var result = await _styleItemService.Add(styleItemName, styleItemDescription);
             if (result)
-                return Ok(ServiceResult<StyleItemModelRequest>.SuccessResult(styleItem));
+                return Ok(ServiceResult<string>.SuccessResult("Add style item success"));
 
-            return Ok(ServiceResult<bool>.FailedResult("Can't add data"));
+            return BadRequest(ServiceResult<bool>.FailedResult("Can't add data"));
         }
 
         // DELETE: api/StyleItem
@@ -110,7 +102,7 @@ namespace MiniStore.API.Controllers
             if (result)
                 return NoContent();
 
-            return Ok(ServiceResult<bool>.FailedResult("Can't remove data"));
+            return BadRequest(ServiceResult<bool>.FailedResult("Can't remove data"));
         }
 
         // PUT: api/StyleItem
@@ -124,7 +116,7 @@ namespace MiniStore.API.Controllers
             if (result)
                 return NoContent();
 
-            return Ok(ServiceResult<bool>.FailedResult("Can't update data"));
+            return BadRequest(ServiceResult<bool>.FailedResult("Can't update data"));
         }
 
         // PUT: api/StyleItem/edit-status
@@ -138,7 +130,7 @@ namespace MiniStore.API.Controllers
             if (result)
                 return NoContent();
 
-            return Ok(ServiceResult<bool>.FailedResult("Can't update data"));
+            return BadRequest(ServiceResult<bool>.FailedResult("Can't update data"));
         }
     }
 }

@@ -71,8 +71,15 @@ namespace MiniStore.Services.styleItem
         }
 
         // Adds a new StyleItem asynchronously
-        public async Task<bool> Add(StyleItem styleItem)
+        public async Task<bool> Add(string styleItemName, string styleItemDescription)
         {
+            var styleItem = new StyleItem()
+            {
+                StyleItemName = styleItemName,
+                Status = true,
+                StyleItemDescription = styleItemDescription,
+                StyleItemId = $"SI{DateTime.Now}",
+            };
             return await _repository.Add(styleItem);
         }
 
@@ -114,7 +121,7 @@ namespace MiniStore.Services.styleItem
                 throw;
             }
         }
-
+        
         // Logs error details to a file asynchronously
         private async Task LogErrorAsync(string message, Exception ex)
         {

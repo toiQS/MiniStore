@@ -19,6 +19,6 @@ namespace MiniStore.Models
         public string StyleItemName { get; set; }= string.Empty;
         [Column(name: "Style Item Description")]
         public string StyleItemDescription { get; set;} = string.Empty;
-        public bool Status {  get; set; } 
+        public bool Status {  get; set; }  
     }
 }

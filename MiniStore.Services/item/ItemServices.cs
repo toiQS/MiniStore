@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MiniStore.Data;
 using MiniStore.Models;
+using MiniStore.Services.item;
 using MiniStore.Services.repository;
 using MiniStore.Services.Repository;
 using System;
@@ -17,7 +18,7 @@ namespace MiniStore.Services.item
         private readonly IRepository<Item> _repository;
         private readonly string _path;
 
-        // Constructor for Unit Test
+        // Constructor for Unit Test - allows injecting a mock repository and context.
         public ItemServices(ApplicationDbContext context, IRepository<Item> repository, string path)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -25,7 +26,7 @@ namespace MiniStore.Services.item
             _path = _repository.GetPath("item", "LogItemService.txt");
         }
 
-        // Constructor for Api Controller
+        // Constructor for API Controller - uses the default repository implementation.
         public ItemServices(ApplicationDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
@@ -33,13 +34,13 @@ namespace MiniStore.Services.item
             _path = _repository.GetPath("item", "LogItemService.txt");
         }
 
-        // Fetch all items from the database
+        // Fetches all items from the database.
         public async Task<IEnumerable<Item>> GetItemsAsync()
         {
             return await _repository.GetAll();
         }
 
-        // Fetch all items with Status = true
+        // Fetches all items with Status = true (active items).
         public async Task<IEnumerable<Item>> GetItemsStatusIsTrueAsync()
         {
             try
@@ -56,7 +57,7 @@ namespace MiniStore.Services.item
             }
         }
 
-        // Fetch all items with Status = false
+        // Fetches all items with Status = false (inactive items).
         public async Task<IEnumerable<Item>> GetItemsStatusIsFalseAsync()
         {
             try
@@ -73,7 +74,7 @@ namespace MiniStore.Services.item
             }
         }
 
-        // Fetch a single item by its ID
+        // Fetches a single item by its ID.
         public async Task<Item> GetItemAsync(string id)
         {
             try
@@ -89,7 +90,7 @@ namespace MiniStore.Services.item
             }
         }
 
-        // Fetch items by a search text (searches in item name)
+        // Fetches items by a search text (searches in item name).
         public async Task<IEnumerable<Item>> GetItemsAsyncByText(string text)
         {
             try
@@ -106,14 +107,32 @@ namespace MiniStore.Services.item
             }
         }
 
-        // Add a new item to the database
-        public async Task<bool> Add(Item item)
+        // Adds a new item to the database.
+        public async Task<bool> AddNewItem(string itemName, int quantity, string styleItemId, string supplierId)
         {
+            var item = new Item()
+            {
+                ItemId = $"I{DateTime.Now:yyyyMMddHHmmssfff}", // Ensure uniqueness by using a timestamp.
+                StyleItemId = styleItemId,
+                SupplierId = supplierId,
+                ItemName = itemName,
+                Quantity = quantity,
+                Status = true
+            };
             return await _repository.Add(item);
         }
 
-        // Toggle the status of an item by its ID
-        public async Task<bool> UpdateStatus(string itemId)
+        // Updates the quantity of an existing item.
+        public async Task<bool> UpdateItem(string itemId, int quantity)
+        {
+            var data = await _context.Item.FirstOrDefaultAsync(x => x.ItemId == itemId);
+            if (data == null) return false;
+            data.Quantity += quantity;
+            return await _repository.Update(data);
+        }
+
+        // Toggles the status of an item by its ID.
+        public async Task<bool> UpdateStatusItem(string itemId)
         {
             var data = await _context.Item
                                      .AsTracking()
@@ -125,8 +144,8 @@ namespace MiniStore.Services.item
             return await _repository.Update(data);
         }
 
-        // Update item details
-        public async Task<bool> Update(string itemId, string itemName, string styleItemId)
+        // Updates item details.
+        public async Task<bool> UpdateInfoItem(string itemId, string itemName, string styleItemId, string supplierId)
         {
             var data = await _context.Item
                                      .AsTracking()
@@ -136,17 +155,28 @@ namespace MiniStore.Services.item
 
             data.ItemName = itemName;
             data.StyleItemId = styleItemId;
+            data.SupplierId = supplierId;
             return await _repository.Update(data);
         }
 
-        // Log error details to a file asynchronously
+        // Deletes an item from the database.
+        public async Task<bool> DeleteItemAsync(string itemId)
+        {
+            var data = await _context.Item
+                                      .AsTracking()
+                                      .FirstOrDefaultAsync(x => x.ItemId == itemId);
+            if (data == null) return false;
+            return await _repository.Delete(data);
+        }
+
+        // Logs error details to a file asynchronously.
         private async Task LogErrorAsync(Exception ex)
         {
             var errorDetails = new StringBuilder();
-            errorDetails.AppendLine($"Message: {ex.Message}\n");
-            errorDetails.AppendLine($"Stack Trace: {ex.StackTrace}\n");
-            errorDetails.AppendLine($"Source: {ex.Source}\n");
-            errorDetails.AppendLine($"Time: {DateTime.Now}\n");
+            errorDetails.AppendLine($"Message: {ex.Message}");
+            errorDetails.AppendLine($"Stack Trace: {ex.StackTrace}");
+            errorDetails.AppendLine($"Source: {ex.Source}");
+            errorDetails.AppendLine($"Time: {DateTime.Now}");
 
             if (!string.IsNullOrEmpty(_path))
             {

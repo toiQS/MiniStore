@@ -14,9 +14,10 @@ namespace MiniStore.Services.item
         public Task<IEnumerable<Item>> GetItemsStatusIsFalseAsync();
         public Task<Item> GetItemAsync(string id);
         public Task<IEnumerable<Item>> GetItemsAsyncByText(string text);
-        public Task<bool> Add(Item item);
-        public Task<bool> UpdateStatus(string itemId);
-        public Task<bool> Update(string itemId, string itemName, string styleItemId);
-
+        public Task<bool> AddNewItem(string itemName, int quantity, string styleItemId, string supplierId);
+        public Task<bool> UpdateItem(string itemId, int quantity);
+        public Task<bool> UpdateInfoItem(string itemId, string itemName, string styleItemId, string supplierId);
+        public Task<bool> DeleteItemAsync(string itemId);
+        public Task<bool> UpdateStatusItem(string itemId);
     }
 }
