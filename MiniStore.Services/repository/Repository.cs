@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniStore.Services.Repository
+namespace MiniStore.Services.repository
 {
     // Generic repository implementation for CRUD operations
     public class Repository<T> : IRepository<T> where T : class
