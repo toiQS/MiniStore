@@ -1,14 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MiniStore.Data;
 using MiniStore.Models;
-using MiniStore.Services.item;
 using MiniStore.Services.repository;
-using MiniStore.Services.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MiniStore.Services.item
 {

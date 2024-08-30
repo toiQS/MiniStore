@@ -15,6 +15,7 @@ namespace MiniStore.Services.invoice
         public Task<IEnumerable<Invoice>> GetInvoicesByEmployeeIdAsync(string employeeId);
         public Task<bool> Add(string employee, string customerId);
         public Task<bool> Update(string invoiceId, string employee, string customerId);
+        public Task<bool> Update(string invoiceId);
         public Task<bool> Delete(string invoiceId);
     }
 }

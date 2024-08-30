@@ -114,6 +114,18 @@ namespace MiniStore.Services.invoice
 
             return await _invoiceRepository.Update(existingInvoice);
         }
+        public async Task<bool> Update(string invoiceId)
+        {
+            var existingInvoice = await _context.Invoice
+                .AsTracking()
+                .FirstOrDefaultAsync(x => x.InvoiceId == invoiceId);
+
+            if (existingInvoice == null) return false;
+
+            existingInvoice.Status  = !existingInvoice.Status;
+
+            return await _invoiceRepository.Update(existingInvoice);
+        }
 
         // Deletes an invoice from the database asynchronously
         public async Task<bool> Delete(string invoiceId)

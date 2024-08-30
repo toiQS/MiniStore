@@ -2,8 +2,6 @@
 using MiniStore.Data;
 using MiniStore.Models;
 using MiniStore.Services.repository;
-using MiniStore.Services.Repository;
-using System.Data.Common;
 using System.Text;
 
 namespace MiniStore.Services.supplier

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MiniStore.Services.invoiceDetail
 {
-    public class InvoiceDetailServices
+    public class InvoiceDetailServices : IInvoiceDetailService
     {
         private readonly ApplicationDbContext _context;
         private readonly IRepository<InvoiceDetail> _repository;
@@ -37,13 +37,13 @@ namespace MiniStore.Services.invoiceDetail
         }
 
         // Retrieves all invoice details asynchronously
-        public async Task<IEnumerable<InvoiceDetail>> GetInvoiceDetailsAsync()
+        public async Task<IEnumerable<InvoiceDetail>> GetInvoiceDetailAsync()
         {
             return await _repository.GetAll();
         }
 
         // Retrieves invoice details by Invoice ID asynchronously
-        public async Task<IEnumerable<InvoiceDetail>> GetInvoiceDetailsByInvoiceIdAsync(string invoiceId)
+        public async Task<IEnumerable<InvoiceDetail>> GetInvoiceDetailByInvoiceIdAsync(string invoiceId)
         {
             try
             {   
@@ -76,7 +76,7 @@ namespace MiniStore.Services.invoiceDetail
         }
 
         // Adds a new invoice detail asynchronously
-        public async Task<bool> AddInvoiceDetailAsync(string invoiceId, string itemId, int quantity)
+        public async Task<bool> Add(string invoiceId, string itemId, int quantity)
         {
             var invoiceDetail = new InvoiceDetail
             {
@@ -93,7 +93,7 @@ namespace MiniStore.Services.invoiceDetail
         }
 
         // Updates an existing invoice detail asynchronously
-        public async Task<bool> UpdateInvoiceDetailAsync(string invoiceDetailId, int newQuantity)
+        public async Task<bool> Update(string invoiceDetailId, int newQuantity)
         {
             var invoiceDetail = await _context.InvoiceDetail.AsNoTracking().FirstOrDefaultAsync(x => x.InvoiceDetailId == invoiceDetailId);
             if (invoiceDetail == null) return false;
@@ -108,7 +108,7 @@ namespace MiniStore.Services.invoiceDetail
         }
 
         // Deletes an invoice detail asynchronously
-        public async Task<bool> DeleteInvoiceDetailAsync(string invoiceDetailId)
+        public async Task<bool> Delete(string invoiceDetailId)
         {
             var invoiceDetail = await _context.InvoiceDetail.AsNoTracking().FirstOrDefaultAsync(x => x.InvoiceDetailId == invoiceDetailId);
             if (invoiceDetail == null) return false;

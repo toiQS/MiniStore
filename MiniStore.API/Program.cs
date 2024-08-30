@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using MiniStore.Data;
+using MiniStore.Services.customer;
+using MiniStore.Services.invoice;
+using MiniStore.Services.invoiceDetail;
 using MiniStore.Services.item;
 using MiniStore.Services.styleItem;
 using MiniStore.Services.supplier;
@@ -22,6 +25,11 @@ builder.Services.AddScoped<ISupplierServices, SupplierServices>();
 builder.Services.AddScoped<IApplicationBuilder, ApplicationBuilder>();
 builder.Services.AddScoped<IItemServices, ItemServices>();
 builder.Services.AddScoped<IStyleItemService, StyleItemService>();
+builder.Services.AddScoped<ICustomerServices, CustomerServices>();
+builder.Services.AddScoped<IInvoiceServices, InvoiceServices>();
+builder.Services.AddScoped<IInvoiceDetailService, InvoiceDetailServices>();
+
+
 
 
 var app = builder.Build();

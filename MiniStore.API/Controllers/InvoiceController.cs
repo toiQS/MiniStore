@@ -26,9 +26,9 @@ namespace MiniStore.API.Controllers
         {
             var data = await _invoiceServices.GetInvoicesAsync();
             if (data == null)
-                return Ok(ServiceResult<IEnumerable<InvoiceDetailController>>.FailedResult("Data was null"));
+                return Ok(ServiceResult<IEnumerable<string>>.FailedResult("Data was null"));
 
-            return Ok(ServiceResult<IEnumerable<InvoiceDetailController>>.SuccessResult(data));
+            return Ok(ServiceResult<IEnumerable<Invoice>>.SuccessResult(data));
         }
 
         // Retrieves an invoice by its ID asynchronously
@@ -43,7 +43,7 @@ namespace MiniStore.API.Controllers
             if (data == null)
                 return BadRequest(ServiceResult<string>.FailedResult("Can't find data"));
 
-            return Ok(ServiceResult<InvoiceDetailController>.SuccessResult(data));
+            return Ok(ServiceResult<Invoice>.SuccessResult(data));
         }
 
         // Retrieves all invoices by a specific customer ID asynchronously
@@ -58,7 +58,7 @@ namespace MiniStore.API.Controllers
             if (data == null)
                 return BadRequest(ServiceResult<string>.FailedResult("Can't find data"));
 
-            return Ok(ServiceResult<IEnumerable<InvoiceDetailController>>.SuccessResult(data));
+            return Ok(ServiceResult<IEnumerable<Invoice>>.SuccessResult(data));
         }
 
         // Retrieves all invoices by a specific employee ID asynchronously
@@ -73,7 +73,7 @@ namespace MiniStore.API.Controllers
             if (data == null)
                 return BadRequest(ServiceResult<string>.FailedResult("Can't find data"));
 
-            return Ok(ServiceResult<IEnumerable<InvoiceDetailController>>.SuccessResult(data));
+            return Ok(ServiceResult<IEnumerable<Invoice>>.SuccessResult(data));
         }
 
         // Adds a new invoice asynchronously

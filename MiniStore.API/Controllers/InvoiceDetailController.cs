@@ -1,12 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MiniStore.API.Models;
 using MiniStore.API.Models.invoiceDetail;
-using MiniStore.Models;
 using MiniStore.Services.invoiceDetail;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MiniStore.API.Controllers
 {
@@ -14,10 +9,10 @@ namespace MiniStore.API.Controllers
     [ApiController]
     public class InvoiceDetailController : ControllerBase
     {
-        private readonly IInvoiceService _invoiceService;
+        private readonly IInvoiceDetailService _invoiceService;
 
         // Constructor to inject dependencies
-        public InvoiceDetailController(IInvoiceService invoiceService)
+        public InvoiceDetailController(IInvoiceDetailService invoiceService)
         {
             _invoiceService = invoiceService;
         }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MiniStore.Services.invoiceDetail
 {
-    public interface IInvoiceService
+    public interface IInvoiceDetailService
     {
         public Task<IEnumerable<InvoiceDetail>> GetInvoiceDetailAsync();
         public Task<IEnumerable<InvoiceDetail>> GetInvoiceDetailByInvoiceIdAsync(string invoiceId);

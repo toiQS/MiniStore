@@ -24,5 +24,6 @@ namespace MiniStore.Models
         [Column(name: "Customer Id")]
         public string? CustomerId { get; set; } = string.Empty; 
         public Customer Customer { get; set; }
+        public bool Status { get; set; }
     }
 }
